@@ -1,254 +1,223 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { providers } from '@/data/mockData';
-import { Provider } from '@/types';
-import Rating from '@/components/ui/Rating';
-import Button from '@/components/ui/Button';
-import Card, { CardBody, CardHeader } from '@/components/ui/Card';
-import { MapPin, Clock, Calendar, Star, Briefcase, Award, ChevronLeft } from 'lucide-react';
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { providers } from "@/data/mockData";
 
-export default function ProviderProfilePage() {
+export default function ProviderProfile() {
   const params = useParams();
-  const router = useRouter();
-  const [provider, setProvider] = useState<Provider | null>(null);
-  const [loading, setLoading] = useState(true);
+  const id = typeof params.id === "string" ? params.id : "";
 
-  useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      const found = providers.find(p => p.id === params.id);
-      setProvider(found || null);
-      setLoading(false);
-    }, 500);
-  }, [params.id]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  const provider = providers.find((p) => p.id === id);
 
   if (!provider) {
     return (
-      <div className="container mx-auto px-4 py-16 text-center">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Provider Not Found</h2>
-        <p className="text-gray-600 mb-8">The service provider you're looking for doesn't exist.</p>
-        <Button onClick={() => router.push('/services')}>
-          Browse Services
-        </Button>
+      <div className="min-h-screen flex items-center justify-center">
+        <h1 className="text-xl font-semibold">Provider not found</h1>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Back Button */}
-      <button
-        onClick={() => router.back()}
-        className="flex items-center text-gray-600 hover:text-blue-600 mb-6"
-      >
-        <ChevronLeft size={20} />
-        <span>Back</span>
-      </button>
+    <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen px-6 py-12">
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Profile Header */}
-          <Card>
-            <CardBody>
-              <div className="flex items-start space-x-6">
-                <img
-                  src={provider.avatar}
-                  alt={provider.name}
-                  className="w-24 h-24 rounded-full object-cover"
-                />
-                <div className="flex-1">
-                  <h1 className="text-2xl font-bold text-gray-800 mb-1">
-                    {provider.name}
-                  </h1>
-                  <p className="text-gray-600 mb-2">{provider.profession}</p>
-                  
-                  <div className="flex items-center space-x-4 mb-3">
-                    <Rating value={provider.rating} count={provider.reviewCount} />
-                    <span className="text-sm text-gray-500">
-                      {provider.completedJobs} jobs completed
-                    </span>
-                  </div>
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-10">
 
-                  <div className="flex items-center text-gray-600">
-                    <MapPin size={16} className="mr-1" />
-                    <span className="text-sm">
-                      {provider.location} • {provider.distance} miles away
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
+        {/* LEFT SECTION */}
+        <div className="lg:col-span-2 space-y-8">
 
-          {/* About */}
-          <Card>
-            <CardHeader>
-              <h2 className="text-lg font-semibold">About</h2>
-            </CardHeader>
-            <CardBody>
-              <p className="text-gray-700 leading-relaxed">{provider.about}</p>
-            </CardBody>
-          </Card>
+          {/* PROFILE HEADER */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-3xl p-8 shadow-lg"
+          >
+            <div className="flex gap-6 items-center">
 
-          {/* Skills & Expertise */}
-          <Card>
-            <CardHeader>
-              <h2 className="text-lg font-semibold">Skills & Expertise</h2>
-            </CardHeader>
-            <CardBody>
-              <div className="flex flex-wrap gap-2">
-                {provider.skills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
-                  >
-                    {skill}
+              <img
+                src={provider.avatar}
+                alt={provider.name}
+                className="w-24 h-24 rounded-full object-cover border-4 border-blue-100"
+              />
+
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {provider.name}
+                </h1>
+
+                <p className="text-gray-500 mt-1">
+                  {provider.profession}
+                </p>
+
+                <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
+                  <span className="text-yellow-500 font-semibold">
+                    ⭐ {provider.rating}
                   </span>
-                ))}
-              </div>
-            </CardBody>
-          </Card>
-
-          {/* Reviews */}
-          <Card>
-            <CardHeader className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold">Reviews</h2>
-              <span className="text-sm text-gray-500">{provider.reviewCount} reviews</span>
-            </CardHeader>
-            <CardBody>
-              {sampleReviews.map((review, index) => (
-                <div key={index} className="border-b last:border-0 py-4 first:pt-0 last:pb-0">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <p className="font-medium text-gray-800">{review.name}</p>
-                      <Rating value={review.rating} size="sm" />
-                    </div>
-                    <span className="text-sm text-gray-500">{review.date}</span>
-                  </div>
-                  <p className="text-gray-600 text-sm">{review.comment}</p>
+                  <span>({provider.reviewCount} reviews)</span>
+                  <span>• {provider.completedJobs} jobs completed</span>
                 </div>
+
+                <p className="text-gray-500 mt-2">
+                  📍 {provider.location} • {provider.distance} km away
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* ABOUT */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white rounded-3xl p-8 shadow"
+          >
+            <h2 className="text-xl font-semibold mb-3">
+              About
+            </h2>
+            <p className="text-gray-600 leading-relaxed">
+              {provider.about}
+            </p>
+          </motion.div>
+
+          {/* SKILLS */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white rounded-3xl p-8 shadow"
+          >
+            <h2 className="text-xl font-semibold mb-4">
+              Skills & Expertise
+            </h2>
+
+            <div className="flex flex-wrap gap-3">
+              {provider.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="px-4 py-2 rounded-full bg-blue-50 text-blue-600 text-sm font-medium hover:bg-blue-100 transition"
+                >
+                  {skill}
+                </span>
               ))}
-            </CardBody>
-          </Card>
+            </div>
+          </motion.div>
+
+          {/* REVIEWS */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="bg-white rounded-3xl p-8 shadow"
+          >
+            <h2 className="text-xl font-semibold mb-6">
+              Reviews ({provider.reviewCount})
+            </h2>
+
+            <div className="space-y-6">
+
+              <div className="border-b pb-4">
+                <div className="flex justify-between">
+                  <h4 className="font-medium">Verified Customer</h4>
+                  <span className="text-sm text-gray-400">
+                    2 days ago
+                  </span>
+                </div>
+                <p className="text-yellow-500 mt-1">★★★★★</p>
+                <p className="text-gray-600 mt-2">
+                  Excellent service! Very professional and punctual.
+                </p>
+              </div>
+
+              <div>
+                <div className="flex justify-between">
+                  <h4 className="font-medium">Happy Client</h4>
+                  <span className="text-sm text-gray-400">
+                    1 week ago
+                  </span>
+                </div>
+                <p className="text-yellow-500 mt-1">★★★★☆</p>
+                <p className="text-gray-600 mt-2">
+                  Quality work and fair pricing.
+                </p>
+              </div>
+
+            </div>
+          </motion.div>
+
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Pricing Card */}
-          <Card>
-            <CardBody>
-              <div className="text-center mb-4">
-                <p className="text-3xl font-bold text-blue-600">${provider.hourlyRate}</p>
-                <p className="text-sm text-gray-500">per hour</p>
-              </div>
+        {/* RIGHT SECTION */}
+        <div className="space-y-8">
 
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center text-gray-600">
-                  <Clock size={16} className="mr-2" />
-                  <span className="text-sm">Available today</span>
-                </div>
-                <div className="flex items-center text-gray-600">
-                  <Calendar size={16} className="mr-2" />
-                  <span className="text-sm">Flexible scheduling</span>
-                </div>
-                <div className="flex items-center text-gray-600">
-                  <Award size={16} className="mr-2" />
-                  <span className="text-sm">Verified professional</span>
-                </div>
-              </div>
+          {/* PRICING CARD */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-white rounded-3xl p-8 shadow-lg sticky top-24"
+          >
+            <h2 className="text-4xl font-bold text-blue-600">
+              ₹{provider.hourlyRate}
+            </h2>
+            <p className="text-gray-500 mb-6">per hour</p>
 
-              <Button 
-                size="lg" 
-                className="w-full mb-3"
-                onClick={() => router.push(`/booking/${provider.id}`)}
+            <div className="space-y-3 text-sm text-gray-600 mb-6">
+              <p>✔ Available today</p>
+              <p>✔ Flexible scheduling</p>
+              <p>✔ Verified professional</p>
+            </div>
+
+            <Link
+              href={`/booking/${provider.id}`}
+              className="block text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition"
+            >
+              Book Now
+            </Link>
+
+            <button className="w-full mt-3 border border-blue-600 text-blue-600 py-3 rounded-xl hover:bg-blue-50 transition">
+              Contact
+            </button>
+          </motion.div>
+
+          {/* AVAILABILITY */}
+          <div className="bg-white rounded-3xl p-8 shadow">
+            <h3 className="font-semibold mb-4">
+              Availability
+            </h3>
+
+            {provider.availability.map((day) => (
+              <div
+                key={day}
+                className="flex justify-between text-gray-600 mb-2"
               >
-                Book Now
-              </Button>
-
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="w-full"
-              >
-                Contact
-              </Button>
-            </CardBody>
-          </Card>
-
-          {/* Availability */}
-          <Card>
-            <CardHeader>
-              <h3 className="font-semibold">Availability</h3>
-            </CardHeader>
-            <CardBody>
-              <div className="space-y-2">
-                {provider.availability.map((day, index) => (
-                  <div key={index} className="flex justify-between items-center">
-                    <span className="text-gray-600">{day}</span>
-                    <span className="text-sm text-gray-500">9:00 AM - 5:00 PM</span>
-                  </div>
-                ))}
+                <span>{day}</span>
+                <span>9:00 AM - 5:00 PM</span>
               </div>
-            </CardBody>
-          </Card>
+            ))}
+          </div>
 
-          {/* Stats */}
-          <Card>
-            <CardBody>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-800">{provider.completedJobs}</p>
-                  <p className="text-xs text-gray-500">Jobs Done</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-800">{provider.reviewCount}</p>
-                  <p className="text-xs text-gray-500">Reviews</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-800">5+</p>
-                  <p className="text-xs text-gray-500">Years Exp</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-800">98%</p>
-                  <p className="text-xs text-gray-500">Satisfaction</p>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
+          {/* STATS */}
+          <div className="bg-white rounded-3xl p-8 shadow grid grid-cols-2 text-center">
+            <div>
+              <p className="text-2xl font-bold">
+                {provider.completedJobs}
+              </p>
+              <p className="text-gray-500 text-sm">
+                Jobs Done
+              </p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold">
+                {provider.reviewCount}
+              </p>
+              <p className="text-gray-500 text-sm">
+                Reviews
+              </p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   );
 }
-
-const sampleReviews = [
-  {
-    name: 'John Doe',
-    rating: 5,
-    date: '2 days ago',
-    comment: 'Excellent service! Very professional and completed the job quickly.'
-  },
-  {
-    name: 'Jane Smith',
-    rating: 4.5,
-    date: '1 week ago',
-    comment: 'Great work, very knowledgeable. Would definitely recommend.'
-  },
-  {
-    name: 'Mike Johnson',
-    rating: 5,
-    date: '2 weeks ago',
-    comment: 'Fantastic experience from start to finish. Will hire again.'
-  }
-];

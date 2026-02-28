@@ -1,6 +1,6 @@
 'use client';
 
-import { ServiceCategory } from '@/types';
+import { ServiceCategory } from '@/types/provider';
 import Card from '../ui/Card';
 import { useRouter } from 'next/navigation';
 

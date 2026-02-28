@@ -1,6 +1,6 @@
 
 import { create } from 'zustand';
-import { Booking, BookingState } from '@/types';
+import { Booking, BookingState } from '@/types/provider';
 
 const useBookingStore = create<BookingState>((set) => ({
   bookings: [],

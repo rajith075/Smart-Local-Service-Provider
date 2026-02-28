@@ -1,6 +1,6 @@
 'use client';
 
-import { Provider } from '@/types';
+import { Provider } from '@/types/provider';
 import Card, { CardBody, CardFooter } from '../ui/Card';
 import Rating from '../ui/Rating';
 import Button from '../ui/Button';

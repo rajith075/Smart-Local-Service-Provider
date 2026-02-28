@@ -1,137 +1,151 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { categories } from '@/data/mockData';
-import CategoryCard from '@/components/services/CategoryCard';
-import SearchBar from '@/components/ui/SearchBar';
-import Button from '../components/ui/Button';
-import { ArrowRight } from 'lucide-react';
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { categories } from "@/data/mockData";
 
 export default function HomePage() {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    router.push(`/services?search=${encodeURIComponent(query)}`);
-  };
-
-  const featuredCategories = categories.slice(0, 6);
-
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Find Trusted Local Services
-          </h1>
-          <p className="text-xl mb-8 text-blue-100">
-            Connect with skilled professionals in your neighborhood
-          </p>
-          
-          <SearchBar onSearch={handleSearch} />
-          
-          <div className="mt-8 flex justify-center space-x-4">
-            <span className="text-sm">Popular:</span>
-            {['Plumbing', 'Cleaning', 'Electrical'].map((item) => (
-              <button
-                key={item}
-                onClick={() => handleSearch(item)}
-                className="text-sm bg-white/20 px-3 py-1 rounded-full hover:bg-white/30 transition"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
+    <div className="bg-gradient-to-br from-blue-50 via-white to-gray-100">
+
+      {/* HERO SECTION */}
+      <section className="relative overflow-hidden py-24 px-6 text-center">
+
+        {/* Background Glow */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-200 rounded-full blur-3xl opacity-40"></div>
         </div>
-      </section>
 
-      {/* Categories Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Browse by Category
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Find the right professional for your needs from our wide range of service categories
-            </p>
-          </div>
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-5xl font-extrabold text-gray-900 leading-tight"
+        >
+          Find Trusted Local Services
+        </motion.h1>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredCategories.map((category) => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
-          </div>
+        <motion.p
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto"
+        >
+          Book verified professionals instantly. Transparent pricing,
+          trusted reviews, and secure service experience.
+        </motion.p>
 
-          <div className="text-center mt-10">
-            <Button 
-              variant="outline" 
-              size="lg"
-              onClick={() => router.push('/services')}
-            >
-              View All Categories
-              <ArrowRight size={18} className="ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-            How It Works
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {steps.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                  {index + 1}
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-gray-900 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Ready to Get Started?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied customers who found their perfect service provider
-          </p>
-          <Button 
-            size="lg"
-            onClick={() => router.push('/services')}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="mt-10"
+        >
+          <Link
+            href="/services"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
           >
-            Find a Service Provider
-          </Button>
+            Browse Services
+          </Link>
+        </motion.div>
+      </section>
+
+      {/* CATEGORY GRID */}
+      <section className="max-w-7xl mx-auto px-6 pb-24">
+        <motion.h2
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-3xl font-bold text-center mb-14"
+        >
+          Explore Popular Services
+        </motion.h2>
+
+        <div className="grid md:grid-cols-3 gap-10">
+          {categories.map((category, index) => (
+            <motion.div
+              key={category.id}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -10 }}
+              className="bg-white rounded-3xl p-10 shadow-md hover:shadow-2xl transition-all duration-300 group"
+            >
+              <div className="text-5xl mb-6">{category.icon}</div>
+
+              <h3 className="text-xl font-semibold mb-3">
+                {category.name}
+              </h3>
+
+              <p className="text-gray-500 mb-6">
+                {category.description}
+              </p>
+
+              <Link
+                href={`/services?category=${category.id}`}
+                className="text-blue-600 font-medium group-hover:underline"
+              >
+                View Providers →
+              </Link>
+            </motion.div>
+          ))}
         </div>
       </section>
+
+      {/* TRUST SECTION */}
+      <section className="bg-white py-20 border-t">
+        <div className="max-w-6xl mx-auto text-center px-6">
+          <h3 className="text-2xl font-bold mb-6">
+            Why Choose SmartLocal?
+          </h3>
+
+          <div className="grid md:grid-cols-3 gap-10 mt-10">
+            <div>
+              <h4 className="font-semibold text-lg mb-2">
+                Verified Professionals
+              </h4>
+              <p className="text-gray-500">
+                Background-checked experts for safe and reliable service.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-lg mb-2">
+                Transparent Pricing
+              </h4>
+              <p className="text-gray-500">
+                No hidden charges. Clear hourly rates.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-lg mb-2">
+                Instant Booking
+              </h4>
+              <p className="text-gray-500">
+                Schedule services in just a few clicks.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20 text-center">
+        <h3 className="text-3xl font-bold mb-6">
+          Ready to Book a Service?
+        </h3>
+
+        <Link
+          href="/services"
+          className="bg-white text-blue-700 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-100 transition-all duration-300"
+        >
+          Get Started
+        </Link>
+      </section>
+
     </div>
   );
 }
-
-const steps = [
-  {
-    title: 'Search',
-    description: 'Find the service you need by browsing categories or searching directly'
-  },
-  {
-    title: 'Compare',
-    description: 'View provider profiles, ratings, and reviews to make an informed choice'
-  },
-  {
-    title: 'Book',
-    description: 'Select a date and time that works for you and confirm your booking'
-  }
-];

@@ -6,7 +6,7 @@ import { providers, categories } from '@/data/mockData';
 import ProviderCard from '@/components/services/ProviderCard';
 import ServiceFilters from '@/components/services/ServiceFilters';
 import SearchBar from '@/components/ui/SearchBar';
-import { Provider } from '@/types';
+import { Provider } from '@/types/provider';
 import { Loader2 } from 'lucide-react';
 
 function ServicesContent() {
