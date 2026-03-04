@@ -16,9 +16,30 @@ export interface Provider {
   hourlyRate: number;
   location: string;
   distance: number; // in km
-  avatar: string;   // image path
+  avatar: string;
   about: string;
   completedJobs: number;
-  availability: string[]; // ["Mon", "Tue", ...]
+  availability: string[];
   categoryId: string;
+}
+
+export interface Booking {
+  id: string;
+  providerId: string;
+  userName: string;
+  userPhone: string;
+  service: string;
+  bookingDate: string;
+  bookingTime: string;
+  status: "pending" | "confirmed" | "completed" | "cancelled";
+}
+
+export interface BookingState {
+  bookings: Booking[];
+  currentBooking: Booking | null;
+
+  addBooking: (booking: Booking) => void;
+  removeBooking: (id: string) => void;
+  setCurrentBooking: (booking: Partial<Booking>) => void;
+  clearCurrentBooking: () => void;
 }
